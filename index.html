@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>محرك برومبتات كوادر</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+/* منع التمدد الجانبي */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ضبط الحاويات الرئيسية */
+.container,
+.wrapper,
+.wrap,
+section,
+header,
+footer,
+.hero,
+.hero-section {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* منع النصوص الطويلة من كسر العرض */
+p,
+h1,
+h2,
+h3,
+span,
+div,
+button,
+textarea,
+input {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* إصلاح الجريد على الهاتف */
+@media (max-width: 768px) {
+  .grid,
+  .cards-grid,
+  .features-grid,
+  .categories-grid,
+  .prompt-cards-grid,
+  .form-grid,
+  .steps-grid {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .card,
+  .feature-card,
+  .category-card,
+  .prompt-card,
+  .form-card,
+  .result-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+<style>
+  :root {
+    --orange: #FF4B0B;
+    --orange-light: #FF7A3D;
+    --orange-glow: rgba(255,75,11,0.18);
+    --navy: #071B5F;
+    --navy-deep: #050914;
+    --navy-mid: #0A2480;
+    --navy-light: #1232A0;
+    --white: #FFFFFF;
+    --white-dim: rgba(255,255,255,0.75);
+    --white-faint: rgba(255,255,255,0.12);
+    --card-bg: rgba(7,27,95,0.55);
+    --border: rgba(255,75,11,0.22);
+    --radius: 16px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.45);
+    --font-main: 'Cairo', 'Tajawal', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-main);
+    background: var(--navy-deep);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(255,75,11,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(10,36,128,0.5) 0%, transparent 60%),
+      linear-gradient(160deg, #050914 0%, #071B5F 60%, #050914 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.022'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+  header {
+    text-align: center;
+    padding: 48px 20px 36px;
+    position: relative;
+  }
+
+  .logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .logo-img {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    filter: none
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .brand-sub {
+    font-size: 0.85rem;
+    color: var(--white-dim);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  .header-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 18px 0 6px;
+  }
+
+  .header-desc {
+    font-size: 0.95rem;
+    color: var(--white-dim);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.9;
+  }
+
+  .header-mission {
+    font-size: 0.93rem;
+    color: var(--white-dim);
+    max-width: 560px;
+    margin: 14px auto 0;
+    line-height: 1.9;
+  }
+
+  .koader-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 30px;
+    margin: 16px auto 6px;
+    box-shadow: 0 4px 18px rgba(255,75,11,0.35);
+    letter-spacing: 0.3px;
+  }
+
+  .koader-quote {
+    font-size: 0.83rem;
+    color: var(--orange-light);
+    font-style: italic;
+    margin-top: 6px;
+    opacity: 0.88;
+  }
+
+  .orange-line {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--orange), transparent);
+    border-radius: 4px;
+    margin: 18px auto 0;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 32px;
+    backdrop-filter: blur(12px);
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: var(--orange);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--white-dim);
+    margin-bottom: 18px;
+    line-height: 1.8;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .why-card {
+    background: var(--white-faint);
+    border-radius: 12px;
+    padding: 18px 16px;
+    border: 1px solid rgba(255,75,11,0.12);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .why-card:hover { border-color: var(--orange); transform: translateY(-3px); }
+  .why-icon { font-size: 1.5rem; margin-bottom: 8px; }
+  .why-title { font-size: 0.93rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .why-text { font-size: 0.82rem; color: var(--white-dim); line-height: 1.7; }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  .step-card {
+    background: var(--white-faint);
+    border-radius: 12px;
+    padding: 16px 14px;
+    text-align: center;
+    border: 1px solid rgba(255,75,11,0.12);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .step-card:hover { border-color: var(--orange); transform: translateY(-3px); }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1rem;
+    margin: 0 auto 10px;
+    box-shadow: 0 4px 14px rgba(255,75,11,0.4);
+  }
+
+  .step-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .field-full { grid-column: 1 / -1; }
+  .field-group { display: flex; flex-direction: column; gap: 7px; }
+
+  label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--orange-light);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  label .req { color: var(--orange); font-size: 0.8rem; }
+
+  input, select, textarea {
+    background: rgba(5,9,20,0.75);
+    border: 1px solid rgba(255,75,11,0.2);
+    border-radius: 10px;
+    color: var(--white);
+    font-family: var(--font-main);
+    font-size: 0.93rem;
+    padding: 11px 14px;
+    width: 100%;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    outline: none;
+    direction: rtl;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px var(--orange-glow);
+  }
+
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
+  select option { background: var(--navy-deep); color: var(--white); }
+  textarea { resize: vertical; min-height: 80px; }
+  .input-error { border-color: #FF4D6D !important; }
+
+  .error-msg {
+    background: rgba(255,77,109,0.12);
+    border: 1px solid rgba(255,77,109,0.4);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    color: #FF8FAA;
+    display: none;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .error-msg.show { display: block; animation: shake 0.4s ease; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  #customToolWrap { display: none; margin-top: 8px; }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+  .btn-primary {
+    flex: 1;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 24px rgba(255,75,11,0.4);
+    letter-spacing: 0.5px;
+    min-width: 180px;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,75,11,0.55); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--white-faint);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--white-dim);
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-secondary:hover { background: rgba(255,75,11,0.12); color: var(--orange-light); }
+
+  .result-card {
+    background: linear-gradient(135deg, rgba(7,27,95,0.8) 0%, rgba(5,9,20,0.9) 100%);
+    border: 1px solid var(--orange);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 32px;
+    display: none;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(255,75,11,0.15), var(--shadow);
+    animation: fadeUp 0.5s ease;
+  }
+
+  .result-card.show { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .result-title { font-size: 1rem; font-weight: 700; color: var(--orange); }
+
+  .result-body {
+    font-size: 0.93rem;
+    line-height: 2;
+    color: var(--white);
+    white-space: pre-wrap;
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 18px;
+    border: 1px solid rgba(255,75,11,0.1);
+    direction: rtl;
+    text-align: right;
+  }
+
+  .btn-copy {
+    background: rgba(255,75,11,0.12);
+    border: 1px solid var(--orange);
+    border-radius: 8px;
+    color: var(--orange-light);
+    font-family: var(--font-main);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .btn-copy:hover { background: rgba(255,75,11,0.22); transform: scale(1.04); }
+  .btn-copy.copied { background: rgba(46,213,115,0.15); border-color: #2ED573; color: #2ED573; }
+
+  .library-desc { font-size: 0.9rem; color: var(--white-dim); margin-bottom: 22px; line-height: 1.8; }
+
+  .library-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+
+  .tab-btn {
+    background: var(--white-faint);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--white-dim);
+    font-family: var(--font-main);
+    font-size: 0.83rem;
+    font-weight: 600;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover, .tab-btn.active {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(255,75,11,0.35);
+  }
+
+  .prompt-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 18px;
+  }
+
+  @media(max-width: 600px) { .prompt-cards-grid { grid-template-columns: 1fr; } }
+
+  .prompt-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prompt-card:hover { border-color: var(--orange); transform: translateY(-4px); box-shadow: 0 12px 36px rgba(255,75,11,0.18); }
+  .prompt-card.hidden { display: none; }
+
+  .card-cat-badge {
+    display: inline-block;
+    background: rgba(255,75,11,0.15);
+    border: 1px solid rgba(255,75,11,0.3);
+    border-radius: 6px;
+    color: var(--orange-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    width: fit-content;
+  }
+
+  .card-title { font-size: 1rem; font-weight: 700; color: var(--white); }
+  .card-desc { font-size: 0.83rem; color: var(--white-dim); line-height: 1.7; }
+
+  .card-prompt-preview {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    border: 1px solid rgba(255,75,11,0.08);
+    max-height: 130px;
+    overflow: hidden;
+    position: relative;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .card-prompt-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, rgba(7,27,95,0.9));
+  }
+
+  .card-footer { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 36px 0; }
+
+  footer {
+    text-align: center;
+    padding: 36px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  .footer-brand { font-size: 1.05rem; font-weight: 700; color: var(--orange); margin-bottom: 6px; }
+  .footer-credits { font-size: 0.85rem; color: var(--white-dim); margin-bottom: 10px; }
+
+  .footer-note {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.35);
+    background: var(--white-faint);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(135deg, #1E8B4F, #2ED573);
+    color: #fff;
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 12px 28px;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(46,213,115,0.4);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-wrap">
+      <img src="logo.png" class="logo-img" id="logoImg" alt="شعار كوادر" />
+    </div>
+    <div class="brand-sub">للتسويق والإعلام</div>
+    <div class="header-title">⚡ محرك برومبتات كوادر</div>
+    <div class="header-desc">أنشئ برومبتات احترافية جاهزة للاستخدام في أي أداة ذكاء اصطناعي، مصممة خصيصاً لمشاريع كوادر.</div>
+    <div class="header-mission">كوادر ليست دورة تدريبية فقط، بل نظام يساعد الشباب على تحويل التعلم إلى تطبيق، والتطبيق إلى دليل عملي، والدليل إلى فرصة دخل.</div>
+    <div style="margin-top:16px;">
+      <div class="koader-badge">🚀 كوادر: من التعلم إلى الدخل</div>
+    </div>
+    <div class="koader-quote">أنت لست كسولاً… أنت غير مُدرَّب.</div>
+    <div class="orange-line"></div>
+  </header>
+
+  <!-- Why section -->
+  <div class="section-card">
+    <div class="section-title">ما فائدة هذا المحرك؟</div>
+    <div class="section-desc">هذا المحرك يساعد فريق كوادر على استخدام الذكاء الاصطناعي بطريقة منظمة، بدل كتابة طلبات عشوائية كل مرة.</div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">يوحّد طريقة العمل</div>
+        <div class="why-text">يجعل الفريق يستخدم نفس المنطق في طلب التصميم، المحتوى، التسويق، التحليل، والأتمتة.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">يحوّل الفكرة إلى تنفيذ</div>
+        <div class="why-text">يأخذ الفكرة الخام ويحوّلها إلى برومبت واضح قابل للاستخدام مباشرة في أدوات الذكاء الاصطناعي.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💎</div>
+        <div class="why-title">يصنع أصلاً قابلاً للتطوير</div>
+        <div class="why-text">يمكن تطويره لاحقاً إلى نظام داخلي، قالب مدفوع، أو أداة قابلة للبيع للمدربين والمشاريع التعليمية.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to use -->
+  <div class="section-card">
+    <div class="section-title">كيف تستخدم المحرك؟</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">١</div>
+        <p>اختر نوع البرومبت من القائمة المنسدلة</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">٢</div>
+        <p>اكتب الهدف والجمهور المستهدف بوضوح</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">٣</div>
+        <p>حدد الأداة والنتيجة المطلوبة</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">٤</div>
+        <p>انسخ البرومبت واستخدمه في الأداة المناسبة</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="section-card">
+    <div class="section-title">محرك البرومبت</div>
+    <div id="errorMsg" class="error-msg">
+      يرجى ملء الحقول الأساسية أولاً: نوع البرومبت، الهدف، الجمهور، والنتيجة المطلوبة.
+    </div>
+    <div class="form-grid">
+
+      <div class="field-group">
+        <label>نوع البرومبت <span class="req">*</span></label>
+        <select id="promptType">
+          <option value="">اختر النوع...</option>
+          <option value="design">التصميم</option>
+          <option value="content">المحتوى</option>
+          <option value="marketing">التسويق</option>
+          <option value="analysis">التحليل</option>
+          <option value="automation">الأتمتة</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>الأداة المستخدمة</label>
+        <select id="tool" onchange="handleToolChange()">
+          <option value="ChatGPT">ChatGPT</option>
+          <option value="Claude">Claude</option>
+          <option value="Manus">Manus</option>
+          <option value="Canva">Canva</option>
+          <option value="Midjourney">Midjourney</option>
+          <option value="DALL·E">DALL·E</option>
+          <option value="Adobe Firefly">Adobe Firefly</option>
+          <option value="Make / Zapier">Make / Zapier</option>
+          <option value="Notion AI">Notion AI</option>
+          <option value="other">أداة أخرى</option>
+        </select>
+        <div id="customToolWrap">
+          <input id="customTool" type="text" placeholder="اكتب اسم الأداة" />
+        </div>
+      </div>
+
+      <div class="field-group field-full">
+        <label>الهدف <span class="req">*</span></label>
+        <textarea id="goal" rows="2" placeholder="مثال: إنشاء محتوى تعليمي يحوّل المهارة إلى دخل لطلاب كوادر..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label>الجمهور <span class="req">*</span></label>
+        <input id="audience" type="text" placeholder="مثال: طلاب كوادر، منشئو محتوى..." />
+      </div>
+
+      <div class="field-group">
+        <label>النبرة / الأسلوب</label>
+        <select id="tone">
+          <option value="احترافي وملهم">احترافي وملهم</option>
+          <option value="تحفيزي وعملي">تحفيزي وعملي</option>
+          <option value="مباشر وواضح">مباشر وواضح</option>
+          <option value="ودود وبسيط">ودود وبسيط</option>
+          <option value="أكاديمي ومنهجي">أكاديمي ومنهجي</option>
+        </select>
+      </div>
+
+      <div class="field-group field-full">
+        <label>النتيجة المطلوبة <span class="req">*</span></label>
+        <input id="output" type="text" placeholder="مثال: منشور جاهز للنشر، خطة أتمتة، تحليل مشروع..." />
+      </div>
+
+      <div class="field-group">
+        <label>القيود (اختياري)</label>
+        <input id="constraints" type="text" placeholder="مثال: بدون تعقيد تقني، لا يتجاوز 300 كلمة..." />
+      </div>
+
+      <div class="field-group">
+        <label>المرجع / السياق (اختياري)</label>
+        <input id="reference" type="text" placeholder="مثال: ورشة كوادر الأولى، منهج الأتمتة..." />
+      </div>
+
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="generatePrompt()">⚡ توليد البرومبت</button>
+      <button class="btn-secondary" onclick="clearForm()">🗑 مسح الحقول</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div class="result-title">✅ البرومبت الجاهز</div>
+      <button class="btn-copy" onclick="copyResult(this)">📋 نسخ البرومبت</button>
+    </div>
+    <div class="result-body" id="resultBody"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Library -->
+  <div>
+    <div class="section-title" style="margin-bottom:8px;">مكتبة برومبتات جاهزة</div>
+    <div class="library-desc">استخدم هذه القوالب مباشرة أو عدّلها حسب المهمة. كل برومبت مصمم ليعكس قيم كوادر: من التعلم إلى الدخل.</div>
+    <div class="library-tabs">
+      <button class="tab-btn active" onclick="filterCards('all',this)">الكل</button>
+      <button class="tab-btn" onclick="filterCards('design',this)">🎨 تصميم</button>
+      <button class="tab-btn" onclick="filterCards('content',this)">✍️ محتوى</button>
+      <button class="tab-btn" onclick="filterCards('marketing',this)">📢 تسويق</button>
+      <button class="tab-btn" onclick="filterCards('analysis',this)">🔍 تحليل</button>
+      <button class="tab-btn" onclick="filterCards('automation',this)">🤖 أتمتة</button>
+    </div>
+    <div class="prompt-cards-grid" id="cardsGrid"></div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <img src="logo.png" class="footer-logo" alt="شعار كوادر" />
+  <div class="footer-brand">محرك برومبتات كوادر — V1</div>
+  <div class="footer-credits">تصميم وتطوير أولي: الشيخ مصطفى &nbsp;|&nbsp; كوادر: من التعلم إلى الدخل</div>
+  <div class="footer-note">هذه نسخة أولى للتجربة الداخلية، وليست منصة ذكاء اصطناعي كاملة بعد.</div>
+</footer>
+
+<div id="toast">✅ تم النسخ بنجاح</div>
+
+<script>
+var EXEC = '\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.';
+
+var LIBRARY = [
+  {
+    id:1, cat:'design', catLabel:'🎨 تصميم',
+    title:'إعلان ورشة',
+    desc:'أنشئ نص إعلان بصري جذاب لورشة تدريبية في كوادر يحث على التسجيل الفوري.',
+    prompt:'أنت مصمم إبداعي وكاتب إعلانات محترف لمشروع كوادر — من التعلم إلى الدخل.\n\nصمّم نص إعلان بصري لورشة تدريبية بالتفاصيل التالية:\n\nاسم الورشة: [اسم الورشة]\nالجمهور: [الجمهور المستهدف]\nالمدة: [مدة الورشة]\nالسعر: [السعر]\nرابط التسجيل: [الرابط]\n\nالمطلوب:\n1. عنوان رئيسي قوي يخاطب الألم أو الطموح مباشرة\n2. 3 فوائد عملية بصيغة نقاط قصيرة\n3. جملة CTA واحدة حادة\n4. هاشتاق كوادر\n\nالأسلوب: تحفيزي ومباشر، يركز على التطبيق العملي وتحويل المهارة إلى دخل.\nلا تتجاوز 150 كلمة.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:2, cat:'design', catLabel:'🎨 تصميم',
+    title:'كاروسيل تعليمي',
+    desc:'أنشئ محتوى كاروسيل تعليمي متسلسل يمزج بين المعرفة والتطبيق العملي.',
+    prompt:'أنت خبير محتوى تعليمي لمشروع كوادر.\n\nصمّم محتوى كاروسيل تعليمي (8 سلايدات) حول الموضوع التالي:\n[موضوع الكاروسيل]\n\nهيكل السلايدات:\n• السلايد 1 — عنوان مثير يطرح مشكلة أو واقعاً صادماً\n• السلايدات 2-6 — خطوات أو نقاط تعليمية (سلايد لكل نقطة)\n• السلايد 7 — خلاصة عملية قابلة للتطبيق فوراً\n• السلايد 8 — CTA: "طبّق هذا اليوم في كوادر"\n\nلكل سلايد: عنوان قصير + جملة أو جملتان.\n\nقيمة كوادر الظاهرة: الإنتاج بدل الاستهلاك، الانضباط، الدليل العملي.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:3, cat:'content', catLabel:'✍️ محتوى',
+    title:'تغريدة تعليمية',
+    desc:'اكتب تغريدة تعليمية قصيرة ومؤثرة تنقل درساً عملياً بأسلوب كوادر.',
+    prompt:'أنت كاتب محتوى تعليمي لمشروع كوادر — تحويل المهارة إلى دخل.\n\nاكتب تغريدة تعليمية حول:\n[الموضوع أو الدرس]\n\nالشروط:\n- لا تتجاوز 280 حرفاً\n- ابدأ بجملة صادمة أو واقع مباشر يوقف التمرير\n- قدّم درساً عملياً واحداً واضحاً\n- اختم بجملة تحفيزية تدعو للتطبيق الفوري\n- أضف هاشتاق واحد ذي صلة\n\nالنبرة: مباشر، تحفيزي، يعكس قيمة "الإنتاج بدل الاستهلاك".\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:4, cat:'content', catLabel:'✍️ محتوى',
+    title:'سكربت ريلز قصير',
+    desc:'اكتب سكربت ريلز 30-60 ثانية يقدم قيمة تعليمية ويحفز على الانضمام لكوادر.',
+    prompt:'أنت كاتب سكربت فيديو قصير لمشروع كوادر.\n\nاكتب سكربت ريلز (30-60 ثانية) حول:\n[موضوع الريلز]\n\nالهيكل:\n⚡ الثانية 0-5: Hook قوي (جملة تصدم أو تستفز الفضول)\n📌 الثانية 5-40: المحتوى الأساسي (3 نقاط سريعة أو قصة صغيرة)\n🎯 الثانية 40-60: الخاتمة + CTA ("تابع كوادر / سجّل الآن")\n\nالأسلوب: طاقة عالية، كلمات قصيرة، جمل مباشرة.\nقيمة كوادر: الدليل العملي، من التعلم إلى الدخل.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:5, cat:'marketing', catLabel:'📢 تسويق',
+    title:'إعلان واتساب',
+    desc:'اكتب رسالة واتساب تسويقية مقنعة تدعو للتسجيل في ورشة أو خدمة كوادر.',
+    prompt:'أنت خبير تسويق رقمي لمشروع كوادر.\n\nاكتب رسالة واتساب تسويقية للتفاصيل التالية:\nالخدمة أو الورشة: [اسم الخدمة]\nالعرض: [العرض الخاص أو الخصم]\nالموعد النهائي: [الموعد]\nرابط التسجيل: [الرابط]\n\nالشروط:\n- ابدأ بتحية شخصية ودافئة\n- اعرض المشكلة ثم الحل بجملتين\n- اذكر 2-3 فوائد فورية\n- أضف عنصر إلحاح (الأماكن محدودة / العرض ينتهي)\n- CTA واضح بالرابط\n- لا تتجاوز 200 كلمة\n- لا تستخدم لغة بيعية مبالغ فيها\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:6, cat:'marketing', catLabel:'📢 تسويق',
+    title:'عرض تسجيل في ورشة',
+    desc:'أنشئ عرض تسجيل احترافي يبرز قيمة الورشة ويجيب على تردد الجمهور.',
+    prompt:'أنت مستشار مبيعات تعليمية لمشروع كوادر — من التعلم إلى الدخل.\n\nأنشئ عرض تسجيل احترافي للورشة التالية:\nاسم الورشة: [الاسم]\nالمدرب: [اسم المدرب]\nالمحتوى: [نقاط المحتوى]\nالسعر: [السعر]\nالمدة: [المدة]\n\nهيكل العرض:\n1. لمن هذه الورشة؟ (3 نقاط)\n2. ماذا ستتعلم؟ (5 نقاط عملية)\n3. لماذا كوادر؟ (ميزة تنافسية)\n4. ضمان ونتيجة متوقعة\n5. CTA + رابط التسجيل\n\nاجعله مقنعاً لشخص يريد تحويل مهارته إلى دخل.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:7, cat:'analysis', catLabel:'🔍 تحليل',
+    title:'تحليل فكرة مشروع طالب',
+    desc:'حلّل فكرة مشروع طالب كوادر وقيّم جدواها وخطوات تنفيذها الأولى.',
+    prompt:'أنت مرشد أعمال متخصص في ريادة الأعمال الرقمية لمشروع كوادر.\n\nحلّل فكرة المشروع التالية لطالب في كوادر:\nالفكرة: [وصف الفكرة]\nمهارة الطالب: [المهارة]\nالميزانية المتاحة: [الميزانية]\n\nالمطلوب:\n1. تقييم الفكرة (قوة / ضعف — 3 نقاط لكل)\n2. حجم السوق المبدئي\n3. أول 3 خطوات عملية يمكن تنفيذها هذا الأسبوع\n4. أكبر خطر يجب تجنبه\n5. كيف تتوافق مع منهج كوادر (التطبيق العملي، تحويل المهارة إلى دخل)\n\nكن صريحاً وعملياً، تجنب التنظير.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:8, cat:'analysis', catLabel:'🔍 تحليل',
+    title:'تحليل محتوى قبل النشر',
+    desc:'حلّل أي محتوى قبل نشره وقيّم مدى تأثيره وتوافقه مع هوية كوادر.',
+    prompt:'أنت محلل محتوى رقمي خبير لمشروع كوادر.\n\nحلّل المحتوى التالي قبل النشر:\n[المحتوى]\n\nالمنصة المستهدفة: [المنصة]\nالهدف من النشر: [الهدف]\n\nقيّمه في هذه المحاور:\n1. Hook (0-10): هل يوقف التمرير؟\n2. القيمة (0-10): هل يقدم شيئاً عملياً؟\n3. الوضوح (0-10): هل الرسالة واضحة؟\n4. CTA (0-10): هل يدعو لفعل واضح؟\n5. توافق هوية كوادر (0-10): الإنتاج، الانضباط، العملية\n\nالتقييم الإجمالي + توصية: انشر / عدّل / أعد الكتابة\n3 تحسينات محددة قابلة للتنفيذ فوراً.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:9, cat:'automation', catLabel:'🤖 أتمتة',
+    title:'أتمتة نشر محتوى',
+    desc:'صمّم Workflow لأتمتة نشر المحتوى عبر منصات كوادر المتعددة.',
+    prompt:'أنت خبير أتمتة وAI Agents لمشروع كوادر.\n\nصمّم Workflow لأتمتة نشر المحتوى بالتفاصيل التالية:\nالمنصات: [المنصات المستهدفة]\nنوع المحتوى: [نص / صورة / فيديو]\nتكرار النشر: [يومي / أسبوعي]\nالأداة: Make أو Zapier أو n8n\n\nهيكل الـ Workflow:\n1. المُشغّل (Trigger): ما الذي يبدأ العملية؟\n2. الخطوات (Steps): تسلسل الإجراءات\n3. نقاط التحقق: أين يتوقف للمراجعة؟\n4. الإشعارات: من يُعلَم عند الانتهاء؟\n5. طريقة الاختبار في الأسبوع الأول\n\nاجعل النسخة الأولى بسيطة، أقل من 5 خطوات.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  },
+  {
+    id:10, cat:'automation', catLabel:'🤖 أتمتة',
+    title:'Agent لفرز أفكار الطلاب',
+    desc:'صمّم AI Agent يفرز ويصنف أفكار مشاريع الطلاب تلقائياً ويعطي ملاحظات أولية.',
+    prompt:'أنت خبير أتمتة وAI Agents لمشروع كوادر.\n\nصمّم Agent ذكي لفرز أفكار مشاريع الطلاب:\n\nالمدخلات: فكرة مشروع (نص حر من الطالب)\nالمخرجات المطلوبة:\n1. تصنيف الفكرة (رقمي / إبداعي / خدمي / تسويقي)\n2. تقييم الجدوى (مرتفع / متوسط / منخفض)\n3. ملاحظة تشجيعية + نقطة تعمّق للتفكير\n4. اقتراح خطوة أولى\n\nالأداة المقترحة: ChatGPT API + Airtable\nTrigger: نموذج Google Form\n\nاجعله بسيطاً يعمل مع 10 طلاب في النسخة الأولى.\nطريقة إعادة بيعه: كأداة SaaS لمشاريع تدريبية أخرى.\nنفّذ مباشرة، واستخدم أفضل افتراض منطقي عند نقص أي تفصيل، وحافظ على هوية كوادر: من التعلم إلى الدخل.'
+  }
+];
+
+function renderCards(filter) {
+  filter = filter || 'all';
+  var grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  LIBRARY.forEach(function(card) {
+    var visible = filter === 'all' || card.cat === filter;
+    var el = document.createElement('div');
+    el.className = 'prompt-card' + (visible ? '' : ' hidden');
+    el.dataset.cat = card.cat;
+    var safePrompt = card.prompt.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var previewHtml = card.prompt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    el.innerHTML =
+      '<div class="card-cat-badge">' + card.catLabel + '</div>' +
+      '<div class="card-title">' + card.title + '</div>' +
+      '<div class="card-desc">' + card.desc + '</div>' +
+      '<div class="card-prompt-preview">' + previewHtml + '</div>' +
+      '<div class="card-footer"><button class="btn-copy" data-p="' + safePrompt + '" onclick="copyCard(this)">📋 نسخ البرومبت</button></div>';
+    grid.appendChild(el);
+  });
+}
+
+function filterCards(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.prompt-card').forEach(function(c){
+    if (cat === 'all' || c.dataset.cat === cat) c.classList.remove('hidden');
+    else c.classList.add('hidden');
+  });
+}
+
+function copyCard(btn) {
+  var text = btn.getAttribute('data-p')
+    .replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+  copyText(btn, text);
+}
+
+function handleToolChange() {
+  var v = document.getElementById('tool').value;
+  document.getElementById('customToolWrap').style.display = v === 'other' ? 'block' : 'none';
+}
+
+function getToolName() {
+  var sel = document.getElementById('tool').value;
+  if (sel === 'other') {
+    var c = document.getElementById('customTool').value.trim();
+    return c || 'أداة AI';
+  }
+  return sel;
+}
+
+function generatePrompt() {
+  var type = document.getElementById('promptType').value;
+  var goal = document.getElementById('goal').value.trim();
+  var audience = document.getElementById('audience').value.trim();
+  var output = document.getElementById('output').value.trim();
+  var tone = document.getElementById('tone').value;
+  var tool = getToolName();
+  var constraints = document.getElementById('constraints').value.trim() || 'لا توجد قيود إضافية.';
+  var reference = document.getElementById('reference').value.trim() || 'لا يوجد مرجع محدد.';
+
+  var errMsg = document.getElementById('errorMsg');
+  var hasError = false;
+
+  ['promptType','goal','audience','output'].forEach(function(id){
+    var el = document.getElementById(id);
+    var val = el.tagName === 'SELECT' ? el.value : el.value.trim();
+    if (!val) { el.classList.add('input-error'); hasError = true; }
+    else { el.classList.remove('input-error'); }
+  });
+
+  if (hasError) {
+    errMsg.classList.add('show');
+    errMsg.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  errMsg.classList.remove('show');
+
+  var p = '';
+  var imageTool = ['Midjourney','DALL·E','Adobe Firefly'].indexOf(tool) !== -1;
+
+  if (type === 'design') {
+    if (imageTool) {
+      p = 'Create a premium vertical 9:16 visual poster for an Arabic educational tech initiative called Koader. The poster promotes: ' + goal + '. Target audience: ' + audience + '. Visual style: modern Arabic edtech, premium, clean, dark navy background, orange accent lighting, white typography space, subtle geometric tech patterns, professional training atmosphere, minimal clutter, strong hierarchy, elegant composition, high contrast, polished social media design. Use navy blue #071B5F, orange #FF4B0B, and white #FFFFFF. Leave clear empty areas for Arabic text and logo placement. Do not generate distorted text. Do not overcrowd the layout. Output should feel like a modern youth transformation brand moving learners from skills to income. Execute directly and use the best reasonable assumptions for missing details. --ar 9:16';
+      p += '\n\nملاحظة: إذا كانت الأداة لا تدعم النص العربي بدقة، اجعل التصميم بدون نصوص، ثم أضف النصوص لاحقاً في Canva.';
+    } else {
+      p  = 'صمّم ' + output + ' لصالح مشروع كوادر بعنوان: ' + goal + '.\n\n';
+      p += 'الجمهور المستهدف:\n' + audience + '\n\n';
+      p += 'هدف التصميم:\nجذب الانتباه، توضيح قيمة العرض، ودفع الجمهور لاتخاذ إجراء واضح.\n\n';
+      p += 'النصوص المقترحة داخل التصميم:\n- العنوان الرئيسي: [استخرج عنواناً مناسباً من الهدف]\n- العنوان الفرعي: [اكتب وعداً واضحاً مرتبطاً بالهدف]\n- الوعد: من التعلم إلى الدخل\n- الدعوة للفعل: سجّل الآن / ابدأ الآن / تواصل معنا\n- توقيع الهوية: كوادر\n\n';
+      p += 'التوجيه البصري:\nاستخدم هوية كوادر البصرية:\n- كحلي داكن #071B5F\n- برتقالي #FF4B0B\n- أبيض #FFFFFF\n\nاجعل التصميم حديثاً، تعليمياً، احترافياً، ومنظماً.\nاستخدم خلفية تقنية خفيفة أو أشكال هندسية بسيطة.\nضع شعار كوادر في الأعلى أو الأسفل بشكل واضح دون أن يطغى على التصميم.\nاجعل العنوان كبيراً ومقروءاً.\nاترك مساحات تنفس كافية بين العناصر.\nتجنب الزحام البصري.\n\n';
+      p += 'النبرة:\n' + tone + '\n\n';
+      p += 'القيود:\n' + constraints + '\n\n';
+      p += 'المرجع:\n' + reference + '\n\n';
+      p += 'صيغة الإخراج:\n' + output + ' جاهز للنشر، مناسب للجمهور المستهدف، ومتسق مع هوية كوادر.';
+      p += EXEC;
+    }
+
+  } else if (type === 'content') {
+    p  = 'أنت خبير محتوى تعليمي وتسويقي لمشروع كوادر.\n\n';
+    p += 'اكتب محتوى حول:\n' + goal + '\n\n';
+    p += 'الجمهور المستهدف:\n' + audience + '\n\n';
+    p += 'المطلوب:\n' + output + '\n\n';
+    p += 'النبرة:\n' + tone + '\n\n';
+    p += 'استخدم فلسفة كوادر:\n- من التعلم إلى الدخل\n- لا يكفي أن تتعلم، يجب أن تنتج دليلاً عملياً\n- المهارة تتحول إلى دخل عندما تُطبّق وتُعرض في السوق\n- كوادر ليست دورة، بل نظام تدريب وإنتاج وانضباط\n- الإنتاج أهم من الاستهلاك\n\n';
+    p += 'هيكل المحتوى:\n1. Hook قوي في البداية\n2. توضيح المشكلة\n3. شرح الفكرة ببساطة\n4. خطوات عملية\n5. مثال تطبيقي\n6. دعوة واضحة للفعل\n\n';
+    p += 'القيود:\n' + constraints + '\n\n';
+    p += 'المرجع:\n' + reference + '\n\n';
+    p += 'اكتب المحتوى بشكل جاهز للنشر، بدون تنظير، وبدون حشو.';
+    p += EXEC;
+
+  } else if (type === 'marketing') {
+    p  = 'أنت خبير تسويق مباشر ومبيعات للمشاريع التعليمية.\n\n';
+    p += 'اكتب مادة تسويقية لصالح كوادر حول:\n' + goal + '\n\n';
+    p += 'الجمهور المستهدف:\n' + audience + '\n\n';
+    p += 'المطلوب:\n' + output + '\n\n';
+    p += 'النبرة:\n' + tone + '\n\n';
+    p += 'استخدم هذا المنطق:\n1. الألم: ما المشكلة التي يعاني منها الجمهور؟\n2. الوعد: ما النتيجة التي سيحصل عليها؟\n3. الآلية: كيف تساعد كوادر على ذلك؟\n4. الدليل: لماذا يصدق الجمهور العرض؟\n5. الدعوة للفعل: ماذا يفعل الآن؟\n\n';
+    p += 'رسالة كوادر الأساسية:\nمن التعلم إلى الدخل.\nكوادر تساعد الشباب على تحويل المهارة إلى مشروع، محتوى، خدمة، أو دخل عملي.\n\n';
+    p += 'القيود:\n' + constraints + '\n\n';
+    p += 'المرجع:\n' + reference + '\n\n';
+    p += 'اكتب نسخة قوية، مباشرة، قابلة للنشر في واتساب أو إنستغرام أو صفحة هبوط.';
+    p += EXEC;
+
+  } else if (type === 'analysis') {
+    p  = 'أنت مستشار استراتيجي داخل مشروع كوادر.\n\n';
+    p += 'حلل الموضوع التالي:\n' + goal + '\n\n';
+    p += 'الجمهور أو الحالة:\n' + audience + '\n\n';
+    p += 'المطلوب:\n' + output + '\n\n';
+    p += 'استخدم هذا الهيكل:\n1. ملخص سريع\n2. التقييم: قوية / متوسطة / ضعيفة\n3. نقاط القوة\n4. نقاط الضعف\n5. فرص الربح أو التطوير\n6. المخاطر\n7. أفضل نسخة محسّنة من الفكرة\n8. خطة تنفيذ من 3 إلى 7 خطوات فقط\n9. ما الذي يجب تجنبه\n\n';
+    p += 'اجعل التحليل عملياً، مباشراً، وقابلاً للتنفيذ داخل كوادر.\n\n';
+    p += 'القيود:\n' + constraints + '\n\n';
+    p += 'المرجع:\n' + reference;
+    p += EXEC;
+
+  } else if (type === 'automation') {
+    p  = 'أنت خبير أتمتة وAI Agents لمشروع كوادر.\n\n';
+    p += 'صمّم Workflow أو Agent لتنفيذ المهمة التالية:\n' + goal + '\n\n';
+    p += 'الجمهور أو المستخدم:\n' + audience + '\n\n';
+    p += 'المطلوب النهائي:\n' + output + '\n\n';
+    p += 'النبرة أو أسلوب النظام:\n' + tone + '\n\n';
+    p += 'استخدم هذا الهيكل:\n1. اسم النظام\n2. المشكلة التي يحلها\n3. المدخلات المطلوبة\n4. خطوات التشغيل\n5. الأدوات المقترحة\n6. المخرجات النهائية\n7. طريقة الاختبار\n8. طريقة استخدامه داخل كوادر\n9. كيف يمكن إعادة بيعه لاحقاً\n\n';
+    p += 'اجعل الحل بسيطاً في النسخة الأولى، بدون تعقيد تقني غير ضروري.\n\n';
+    p += 'القيود:\n' + constraints + '\n\n';
+    p += 'المرجع:\n' + reference;
+    p += EXEC;
+  }
+
+  var resultCard = document.getElementById('resultCard');
+  var resultBody = document.getElementById('resultBody');
+  resultBody.textContent = p;
+  resultCard.classList.add('show');
+  setTimeout(function(){ resultCard.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+}
+
+function copyText(btn, text) {
+  function success() {
+    btn.classList.add('copied');
+    btn.textContent = '✅ تم النسخ';
+    showToast();
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 نسخ البرومبت';
+    }, 2500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(success).catch(function(){
+      fallbackCopy(text); success();
+    });
+  } else {
+    fallbackCopy(text); success();
+  }
+}
+
+function copyResult(btn) {
+  copyText(btn, document.getElementById('resultBody').textContent);
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function showToast() {
+  var t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+function clearForm() {
+  ['promptType','tool','tone'].forEach(function(id){ document.getElementById(id).selectedIndex = 0; });
+  ['goal','audience','output','constraints','reference'].forEach(function(id){ document.getElementById(id).value = ''; });
+  var ct = document.getElementById('customTool'); if(ct) ct.value = '';
+  ['promptType','goal','audience','output'].forEach(function(id){ document.getElementById(id).classList.remove('input-error'); });
+  document.getElementById('errorMsg').classList.remove('show');
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('customToolWrap').style.display = 'none';
+}
+
+renderCards();
+</script>
+</body>
+</html>
